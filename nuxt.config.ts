@@ -7,6 +7,7 @@ export default defineNuxtConfig({
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.png" }],
     },
   },
+  future: { compatibilityVersion: 4 },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   devServer: {
@@ -32,5 +33,9 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@nuxtjs/supabase",
     "@nuxtjs/leaflet",
+    "@nuxtjs/turnstile",
   ],
+  turnstile: {
+    siteKey: "0x4AAAAAABgPMyVOvsDnioqa",
+  },
 });

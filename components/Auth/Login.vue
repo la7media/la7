@@ -4,6 +4,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
 const isLoading = ref(false);
+const token = ref("");
 const { login, errorMessage, loginParams } = useAuth();
 
 const loginManage = async () => {
@@ -13,7 +14,7 @@ const loginManage = async () => {
   errorMessage.value = "";
 
   try {
-    const { error } = await login();
+    const { error } = await login(token.value);
     if (!error) navigateTo("/directorio");
   } catch (err) {
     errorMessage.value =
@@ -54,13 +55,13 @@ const loginManage = async () => {
             for="phone"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Celular
+            Celular o correo
           </Label>
           <Input
             id="phone"
             v-model="loginParams.phone"
             type="phone"
-            placeholder="3001234567"
+            placeholder="user@email.com | 3001234567"
             required
             :disabled="isLoading"
             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -91,6 +92,9 @@ const loginManage = async () => {
             :disabled="isLoading"
             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
+        </div>
+        <div>
+          <NuxtTurnstile v-model="token" />
         </div>
       </div>
 

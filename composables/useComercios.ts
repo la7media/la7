@@ -12,38 +12,41 @@ export function useComercios() {
         resolve(null);
         return;
       }
+      if (imageInput.files[0]) {
+        new Compressor(imageInput.files[0], {
+          maxHeight: 320,
+          maxWidth: 320,
+          quality: 0.5,
+          mimeType: "image/webp",
+          convertSize: 0, // fuerza la compresión sin importar el tamaño
+          checkOrientation: false,
+          success: async (file) => {
+            try {
+              const { data, error: uploadError } = await supabase.storage
+                .from("comercios")
+                .upload(`comercios/${fileName}`, file, {
+                  cacheControl: "3600",
+                  upsert: true,
+                });
 
-      new Compressor(imageInput.files[0], {
-        maxHeight: 320,
-        maxWidth: 410,
-        quality: 0.6,
-        checkOrientation: false,
-        success: async (file) => {
-          try {
-            const { data, error: uploadError } = await supabase.storage
-              .from("comercios")
-              .upload(`comercios/${fileName}`, file, {
-                cacheControl: "3600",
-                upsert: true,
-              });
+              if (uploadError) {
+                console.error("Error al subir la imagen:", uploadError);
+                reject(uploadError);
+                return;
+              }
 
-            if (uploadError) {
-              console.error("Error al subir la imagen:", uploadError);
-              reject(uploadError);
-              return;
+              resolve(data.path);
+            } catch (error) {
+              console.error("Error en el proceso de subida:", error);
+              reject(error);
             }
-
-            resolve(data.path);
-          } catch (error) {
-            console.error("Error en el proceso de subida:", error);
+          },
+          error: (error) => {
+            console.error("Error al comprimir la imagen:", error);
             reject(error);
-          }
-        },
-        error: (error) => {
-          console.error("Error al comprimir la imagen:", error);
-          reject(error);
-        },
-      });
+          },
+        });
+      }
     });
   };
 
@@ -150,6 +153,7 @@ export function useComercios() {
     filterLike: boolean = false,
     allCoincidence: boolean = false
   ) => {
+    const user = useSupabaseUser();
     const { data, count, hasMore } = await $fetch("/api/comercios", {
       query: {
         categorias: categorias.join(","),
@@ -161,7 +165,7 @@ export function useComercios() {
         lng: location?.lng ?? 0,
         filterLike: filterLike ? "true" : "false",
         allCoincidence: allCoincidence ? "true" : "false",
-        activeSesion: useSupabaseUser().value?.id ? "true" : "false",
+        activeSesion: user.value ? "true" : "false",
       },
       headers: useRequestHeaders(["cookie"]),
     });

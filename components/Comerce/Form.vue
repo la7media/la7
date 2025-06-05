@@ -23,8 +23,10 @@ const guardarComercio = async () => {
   try {
     if (imageInput.value?.files?.length) {
       nuevoComercio.image =
-        (await uploadComercePhoto(imageInput.value, form.value.slug ?? "")) ??
-        "";
+        (await uploadComercePhoto(
+          imageInput.value,
+          nuevoComercio.slug ?? ""
+        )) ?? "";
     }
     if (editingComercio.value) {
       await updateComerce(nuevoComercio, editingComercio.value);

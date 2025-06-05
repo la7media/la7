@@ -112,6 +112,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+.min-h-template{
+  min-height: calc(100vh - 86px)
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

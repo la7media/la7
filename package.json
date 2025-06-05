@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@nuxt/eslint": "1.3.0",
+    "@nuxt/scripts": "^0.11.0",
     "@nuxtjs/leaflet": "^1.2.6",
     "@nuxtjs/supabase": "1.5.0",
+    "@nuxtjs/turnstile": "1.0.0",
     "@tailwindcss/vite": "^4.1.0",
     "@vueuse/core": "^13.3.0",
     "class-variance-authority": "^0.7.1",
