@@ -1,8 +1,10 @@
+import type { RegisterParams } from "~/lib/interfaces/auth";
+
 export const useAuth = () => {
   const supabase = useSupabaseClient();
   const userS = useSupabaseUser();
   const loginParams = ref({
-    email: "",
+    phone: "",
     password: "",
   });
   const errorMessage = ref("");
@@ -36,23 +38,73 @@ export const useAuth = () => {
       switch (error.message) {
         case "Invalid login credentials":
           errorMessage.value =
-            "Credenciales incorrectas. Verifica tu email y contraseña.";
+            "Credenciales incorrectas. Verifica tu teléfono y contraseña.";
           break;
-        case "Email not confirmed":
+        case "Phone not confirmed":
           errorMessage.value =
-            "Debes confirmar tu email antes de iniciar sesión.";
+            "Debes confirmar tu teléfono antes de iniciar sesión.";
           break;
         case "Too many requests":
           errorMessage.value =
             "Demasiados intentos. Intenta nuevamente en unos minutos.";
           break;
         default:
+          console.log(error.message);
           errorMessage.value = "Error al iniciar sesión. Intenta nuevamente.";
       }
     } else {
       await refresh();
     }
     return { error, message: errorMessage.value };
+  };
+
+  const register = async (params: RegisterParams) => {
+    try {
+      const supabase = useSupabaseClient();
+
+      // 1. Crear usuario en Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        phone: params.celular,
+        password: params.password,
+        options: {
+          data: {},
+        },
+      });
+
+      if (authError) {
+        console.error("Error en autenticación:", authError);
+        return { error: authError.message };
+      }
+
+      if (!authData.user) {
+        return { error: "No se pudo crear el usuario" };
+      }
+
+      // 2. Crear perfil en la tabla perfiles
+      const { error: profileError } = await supabase.from("perfiles").insert({
+        user_id: authData.user.id,
+        nombre: params.nombre,
+        celular: parseInt(params.celular), // Convertir a numeric
+        direccion: params.direccion || null,
+        last_ubication: null,
+      } as never);
+
+      if (profileError) {
+        console.error("Error al crear perfil:", profileError);
+
+        return { error: "Error al crear el perfil de usuario" };
+      }
+
+      return { data: authData, error: null };
+    } catch (error) {
+      console.error("Error general en registro:", error);
+      return {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Error desconocido durante el registro",
+      };
+    }
   };
 
   const logout = async () => {
@@ -81,6 +133,7 @@ export const useAuth = () => {
     isAdmin,
     logout,
     login,
+    register,
     loginParams,
     errorMessage,
   };

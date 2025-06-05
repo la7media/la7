@@ -5,7 +5,8 @@ definePageMeta({ middleware: ["unauthenticated"] });
 
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+    class="flex items-center justify-center bg-gray-50 py-4 px-4"
+    style="min-height: calc(100vh - 86px)"
   >
     <AuthLogin />
   </div>

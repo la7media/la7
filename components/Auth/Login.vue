@@ -4,9 +4,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
 const isLoading = ref(false);
-const auth = useAuth();
-const { login } = auth;
-const { errorMessage, loginParams } = toRefs(auth);
+const { login, errorMessage, loginParams } = useAuth();
 
 const loginManage = async () => {
   if (isLoading.value) return;
@@ -29,7 +27,13 @@ const loginManage = async () => {
 <template>
   <div class="max-w-md w-full space-y-8">
     <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Iniciar Sesión</h1>
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">
+        Iniciar
+        <span
+          class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600"
+          >Sesión</span
+        >
+      </h1>
       <p class="text-gray-600">
         Ingresa tus credenciales para acceder a tu cuenta
       </p>
@@ -47,16 +51,16 @@ const loginManage = async () => {
       <div class="space-y-4">
         <div>
           <Label
-            for="email"
+            for="phone"
             class="block text-sm font-medium text-gray-700 mb-1"
           >
-            Correo Electrónico
+            Celular
           </Label>
           <Input
-            id="email"
-            v-model="loginParams.email"
-            type="email"
-            placeholder="ejemplo@correo.com"
+            id="phone"
+            v-model="loginParams.phone"
+            type="phone"
+            placeholder="3001234567"
             required
             :disabled="isLoading"
             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -124,12 +128,12 @@ const loginManage = async () => {
       <div class="text-center">
         <p class="text-sm text-gray-600">
           ¿No tienes una cuenta?
-          <a
-            href="/registro"
+          <NuxtLink
             class="font-medium text-blue-600 hover:text-blue-500 underline"
+            to="/registro"
           >
             Regístrate aquí
-          </a>
+          </NuxtLink>
         </p>
       </div>
     </form>
