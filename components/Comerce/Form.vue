@@ -46,8 +46,10 @@ const guardarComercio = async () => {
 };
 
 const cerrarFormulario = () => {
-  emit("cerrar-form", false);
-  showForm.value = false;
+  if (confirm("¿Seguro desea cerrar el formulario? Se perderán los cambios.")) {
+    emit("cerrar-form", false);
+    showForm.value = false;
+  }
 };
 </script>
 <template>

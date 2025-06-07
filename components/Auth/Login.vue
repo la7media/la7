@@ -14,8 +14,8 @@ const loginManage = async () => {
   errorMessage.value = "";
 
   try {
-    const { error } = await login(token.value);
-    if (!error) navigateTo("/directorio");
+    const res = await login(token.value);
+    if (!res?.error) navigateTo("/directorio");
   } catch (err) {
     errorMessage.value =
       "Error de conexión. Verifica tu internet e intenta nuevamente." +
@@ -83,14 +83,13 @@ const loginManage = async () => {
               ¿Olvidaste tu contraseña?
             </a>
           </div>
-          <Input
+
+          <PasswordInput
             id="password"
             v-model="loginParams.password"
-            type="password"
             placeholder="••••••••"
             required
             :disabled="isLoading"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
         </div>
         <div>

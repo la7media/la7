@@ -87,6 +87,24 @@ export const useAuth = () => {
     return { error, message: errorMessage.value };
   };
 
+  const resetPasswordRequest = async (email: string) => {
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`, // URL de redirección
+      });
+
+      return { data, error };
+    } catch (e) {
+      console.error("Error desconocido al resetear password:", e);
+      return {
+        error: {
+          message: e || "Error desconocido al procesar la solicitud",
+        },
+        data: null,
+      };
+    }
+  };
+
   const register = async (params: RegisterParams, token: string) => {
     if (!token) {
       return { error: "No se envió token" };
@@ -170,12 +188,29 @@ export const useAuth = () => {
     return user.value?.profile?.type === "admin";
   };
 
+  const updatePassword = async (newPassword: string) => {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) throw error;
+
+      return { data, error: null };
+    } catch (error) {
+      console.error("Error updating password:", error);
+      return { data: null, error };
+    }
+  };
+
   return {
     user,
     isAdmin,
     logout,
     login,
     register,
+    updatePassword,
+    resetPasswordRequest,
     loginParams,
     errorMessage,
   };

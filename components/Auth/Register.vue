@@ -165,14 +165,12 @@ const registerManage = async () => {
           >
             Contraseña *
           </Label>
-          <Input
+          <PasswordInput
             id="password"
             v-model="registerParams.password"
-            type="password"
             placeholder="••••••••"
             required
             :disabled="isLoading"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
         </div>
 
@@ -184,14 +182,12 @@ const registerManage = async () => {
           >
             Confirmar Contraseña *
           </Label>
-          <Input
-            id="confirmPassword"
+          <PasswordInput
+            id="password"
             v-model="registerParams.confirmPassword"
-            type="password"
             placeholder="••••••••"
             required
             :disabled="isLoading"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
         </div>
       </div>

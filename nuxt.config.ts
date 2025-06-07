@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from "@tailwindcss/vite";
-
 export default defineNuxtConfig({
   app: {
     head: {
@@ -11,8 +10,12 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   devServer: {
-    host: "0.0.0.0",
     port: 3000,
+    host: "0.0.0.0",
+    https: {
+      key: "../la7media.test+3-key.pem",
+      cert: "../la7media.test+3.pem",
+    },
   },
 
   css: ["~/assets/css/main.css", "leaflet/dist/leaflet.css"],
