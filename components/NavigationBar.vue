@@ -19,9 +19,18 @@
         <IconsBlocks />
         <span>Directorio</span>
       </NavigationBarLink>
+      <NavigationBarLink to="planes">
+        <IconsMoney />
+        <span>Planes</span>
+      </NavigationBarLink>
     </div>
     <div>
-      <AuthCard />
+      <client-only>
+        <AuthCard />
+        <template #fallback>
+          <div class="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+        </template>
+      </client-only>
     </div>
   </nav>
 </template>

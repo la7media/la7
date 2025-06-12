@@ -69,20 +69,15 @@ const registerManage = async () => {
 
 <template>
   <div class="max-w-xl w-full space-y-4 m-auto">
-    <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">
-        Crear
-        <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600"
-          >Cuenta</span
-        >
-      </h1>
-      <p class="text-gray-600">
-        Completa los siguientes datos para registrarte
-      </p>
-    </div>
+    <AppTitle>
+      crear
+      <template #emphasis>cuenta</template>
+      <template #description
+        >Completa los siguientes datos para registrarte</template
+      >
+    </AppTitle>
 
-    <form class="mt-4 space-y-2" @submit.prevent="registerManage">
+    <form class="space-y-2" @submit.prevent="registerManage">
       <!-- Mensaje de error -->
       <div
         v-if="errorMessage"

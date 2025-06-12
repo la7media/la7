@@ -4,7 +4,8 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 
 const isLoading = ref(false);
-const token = ref("");
+const isDev = process.env.NODE_ENV === "development";
+const token = ref(isDev ? "development-token" : "");
 const { login, errorMessage, loginParams } = useAuth();
 
 const loginManage = async () => {
@@ -12,6 +13,14 @@ const loginManage = async () => {
 
   isLoading.value = true;
   errorMessage.value = "";
+
+  // En desarrollo, simula que siempre hay token
+  const currentToken = isDev ? "development-token" : token.value;
+
+  if (!currentToken) {
+    errorMessage.value = "No se validó el captcha.";
+    return;
+  }
 
   try {
     const res = await login(token.value);
@@ -27,18 +36,13 @@ const loginManage = async () => {
 </script>
 <template>
   <div class="max-w-md w-full space-y-8">
-    <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">
-        Iniciar
-        <span
-          class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600"
-          >Sesión</span
-        >
-      </h1>
-      <p class="text-gray-600">
-        Ingresa tus credenciales para acceder a tu cuenta
-      </p>
-    </div>
+    <AppTitle>
+      Iniciar
+      <template #emphasis>sesión</template>
+      <template #description
+        >Ingresa tus credenciales para acceder a tu cuenta</template
+      >
+    </AppTitle>
 
     <form class="mt-8 space-y-6" @submit.prevent="loginManage">
       <!-- Mensaje de error -->
@@ -99,7 +103,7 @@ const loginManage = async () => {
 
       <Button
         type="submit"
-        :disabled="isLoading"
+        :disabled="isLoading || token == ''"
         class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors duration-200"
       >
         <span v-if="isLoading" class="flex items-center">

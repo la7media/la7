@@ -28,6 +28,7 @@ export default defineNuxtConfig({
       auth: {
         persistSession: true,
         autoRefreshToken: true,
+        detectSessionInUrl: true,
       },
     },
   },
@@ -38,7 +39,9 @@ export default defineNuxtConfig({
     "@nuxtjs/leaflet",
     "@nuxtjs/turnstile",
   ],
+
   turnstile: {
-    siteKey: "0x4AAAAAABgPMyVOvsDnioqa",
+    siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
+    addValidateEndpoint: true,
   },
 });

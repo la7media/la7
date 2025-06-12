@@ -20,18 +20,30 @@ export const useAuth = () => {
   );
 
   const loadProfile = async () => {
-    if (!userS.value) return { user: null };
-    const { data: profile, error } = await supabase
-      .from("perfiles")
-      .select("*")
-      .eq("user_id", userS.value!.id)
-      .single();
-
-    if (error) {
-      console.error("Error fetching profile:", error);
-      throw createError({ statusCode: 500, statusMessage: error.message });
+    if (!userS.value) {
+      user.value = null;
+      return { user: null };
     }
-    user.value = { ...userS.value, profile: profile || null };
+
+    try {
+      const { data: profile, error } = await supabase
+        .from("perfiles")
+        .select("*")
+        .eq("user_id", userS.value!.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        return { user: null, error };
+      }
+
+      user.value = { ...userS.value, profile: profile || null };
+      return { user: user.value };
+    } catch (error) {
+      console.error("Error in loadProfile:", error);
+      user.value = null;
+      return { user: null, error };
+    }
   };
 
   const login = async (token: string) => {
@@ -185,7 +197,8 @@ export const useAuth = () => {
   };
 
   const isAdmin = () => {
-    return user.value?.profile?.type === "admin";
+    const profile = user.value?.profile as { type: string } | null;
+    return profile?.type === "admin";
   };
 
   const updatePassword = async (newPassword: string) => {
@@ -203,8 +216,27 @@ export const useAuth = () => {
     }
   };
 
+  watch(
+    userS,
+    async (newUser) => {
+      if (newUser && !user.value) {
+        await loadProfile();
+      } else if (!newUser) {
+        user.value = null;
+      }
+    },
+    { immediate: true }
+  );
+
+  const initializeAuth = async () => {
+    if (userS.value && !user.value) {
+      await loadProfile();
+    }
+  };
+
   return {
     user,
+    initializeAuth,
     isAdmin,
     logout,
     login,

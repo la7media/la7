@@ -37,7 +37,7 @@ const handleLikeComerce = async (id: number) => {
   try {
     if (isLiked.value) {
       // Si ya tiene like, quitarlo
-      const success = await unlikeComerce(id, user.value.id);
+      const success = await unlikeComerce(id, user.value.id as string);
       if (success !== false) {
         // unlikeComerce no retorna true, solo false en error
         isLiked.value = false;
@@ -45,7 +45,7 @@ const handleLikeComerce = async (id: number) => {
       }
     } else {
       // Si no tiene like, agregarlo
-      const success = await likeComerce(id, user.value.id);
+      const success = await likeComerce(id, user.value.id as string);
       if (success) {
         isLiked.value = true;
         emit("liked", id);
