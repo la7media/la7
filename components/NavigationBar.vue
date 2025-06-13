@@ -1,6 +1,4 @@
-<script setup lang="ts">
-const { user } = useAuth();
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <nav
@@ -15,22 +13,15 @@ const { user } = useAuth();
       <!-- <NavigationBarLink to="radio">Programación </NavigationBarLink>
       <NavigationBarLink to="coupons">Cupones </NavigationBarLink>
       <NavigationBarLink to="sales">Clasificados</NavigationBarLink> -->
-      <client-only>
-        <NavigationBarLink v-if="!user" to="/">
-          <IconsHome />
-          <span>Inicio</span>
-        </NavigationBarLink>
-      </client-only>
       <NavigationBarLink to="directorio">
         <IconsBlocks />
         <span>Directorio</span>
       </NavigationBarLink>
-      <client-only>
-        <NavigationBarLink v-if="!user" to="planes">
-          <IconsMoney />
-          <span>Planes</span>
-        </NavigationBarLink>
-      </client-only>
+
+      <NavigationBarLink to="planes">
+        <IconsMoney />
+        <span>Planes</span>
+      </NavigationBarLink>
     </div>
     <div>
       <client-only>

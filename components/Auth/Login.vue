@@ -99,7 +99,7 @@ const loginManage = async () => {
             :disabled="isLoading"
           />
         </div>
-        <div>
+        <div class="h-9">
           <NuxtTurnstile v-model="token" />
         </div>
       </div>

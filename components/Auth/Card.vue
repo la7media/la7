@@ -25,17 +25,22 @@ const { user, isAdmin, isProvider } = useAuth();
         <AuthLogout><span class="text-sm">Salir</span></AuthLogout>
       </div>
     </div>
-    <div
-      v-else
-      class="flex items-center space-x-4 text-gray-800 hover:text-orange-600 transition-colors"
-    >
+    <div v-else class="flex items-center gap-2">
+      <NuxtLink
+        to="/registro"
+        class="flex items-center flex-col gap-1 text-sm md:text-xl text-gray-800 hover:text-orange-600 transition-colors"
+        title="Registrarse"
+      >
+        <IconsRegistro />
+        <span class="text-sm">Registro</span>
+      </NuxtLink>
       <NuxtLink
         to="/login"
-        class="flex items-center flex-col gap-1 text-lg md:text-xl"
+        class="flex items-center flex-col gap-1 text-sm md:text-xl text-gray-800 hover:text-orange-600 transition-colors"
         title="Iniciar sesión"
       >
         <IconsLogin />
-        <span class="text-sm font-bold">Ingresar</span>
+        <span class="text-sm">Ingresar</span>
       </NuxtLink>
     </div>
   </div>
