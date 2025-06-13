@@ -6,8 +6,8 @@ export const usePasswordValidation = () => {
   // Validaciones de contraseña
   const passwordErrors = computed(() => {
     const errors = [];
-    if (password.value && password.value.length < 8) {
-      errors.push("Mínimo 8 caracteres");
+    if (password.value && password.value.length < 6) {
+      errors.push("Mínimo 6 caracteres");
     }
     if (password.value && !/(?=.*[a-z])(?=.*[A-Z])/.test(password.value)) {
       errors.push("Debe contener mayúsculas y minúsculas");

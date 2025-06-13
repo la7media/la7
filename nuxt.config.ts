@@ -11,7 +11,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   devServer: {
     port: 3000,
-    host: "0.0.0.0",
     https: {
       key: "../la7media.test+3-key.pem",
       cert: "../la7media.test+3.pem",
@@ -21,6 +20,13 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css", "leaflet/dist/leaflet.css"],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      hmr: {
+        protocol: "wss",
+        host: "la7media.test",
+        port: 5173,
+      },
+    },
   },
   supabase: {
     redirect: false,

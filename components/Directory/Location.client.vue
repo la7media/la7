@@ -13,14 +13,8 @@ const handleLocation = async () => {
 
   if (activeLocation.value) {
     if (geoPermission.state === "granted") {
-      if (
-        !confirm(
-          "¿Actualizar la ubicación actual? Si cancela, se desactivará la ubicación."
-        )
-      ) {
-        await disableLocation(); // Usar la función del composable
-        return;
-      }
+      await disableLocation(); // Usar la función del composable
+      return;
     }
   }
 

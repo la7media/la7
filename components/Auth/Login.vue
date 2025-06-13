@@ -24,7 +24,10 @@ const loginManage = async () => {
 
   try {
     const res = await login(token.value);
-    if (!res?.error) navigateTo("/directorio");
+    if (!res?.error) {
+      useLocation().reset();
+      navigateTo("/directorio");
+    }
   } catch (err) {
     errorMessage.value =
       "Error de conexión. Verifica tu internet e intenta nuevamente." +

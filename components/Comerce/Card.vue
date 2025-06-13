@@ -36,6 +36,13 @@ const handleDeleteComerce = async (comercio: Comercio) => {
   await deleteComerce(comercio);
   emits("delete-comercio");
 };
+
+const distance = computed(() => {
+  const distance = Math.round((comercio.distance ?? 1000) * 1000);
+  if (distance < 120) return ` < 120 mt`;
+  if (distance < 1000) return `${distance} mt`;
+  return Math.round(distance / 1000) + " km";
+});
 </script>
 <template>
   <div class="">
@@ -75,7 +82,7 @@ const handleDeleteComerce = async (comercio: Comercio) => {
         <h3 class="text-xl font-semibold text-gray-900 mb-2">
           {{ comercio.name }}
           <span v-if="comercio.distance" class="text-sm text-gray-600 ml-2"
-            >a {{ Math.round(comercio.distance * 1000) }} mt</span
+            >a {{ distance }}</span
           >
         </h3>
 

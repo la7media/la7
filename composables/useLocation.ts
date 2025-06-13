@@ -10,10 +10,11 @@ export const useLocation = () => {
   const { user } = useAuth();
 
   // Usa LocalStorage y genera solo si no existe
-  const locationKey = useLocalStorage<string>("locationKey", () => {
+  const getKey = (): string => {
     // Si hay usuario, usa su id; si no, genera uno random
-    return user.value ? user.value.id : crypto.randomUUID();
-  });
+    return user.value ? (user.value.id as string) : crypto.randomUUID();
+  };
+  const locationKey = useLocalStorage<string>("locationKey", getKey());
 
   const disableLocation = async () => {
     activeLocation.value = false;
@@ -54,7 +55,14 @@ export const useLocation = () => {
     }
   };
 
+  const reset = () => {
+    locationKey.value = getKey();
+    activeLocation.value = false;
+  };
+
   return {
+    reset,
+    getKey,
     activeLocation,
     setCurrentLocation,
     currentLocation,

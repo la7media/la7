@@ -2,10 +2,10 @@
 type Size = "normal" | "big" | "extraBig";
 type Align = "center" | "left" | "right";
 
-const { size } = withDefaults(defineProps<{ size?: Size; align?: Align }>(), {
-  size: "normal",
-  align: "center",
-});
+const { size = "normal", align = "center" } = defineProps<{
+  size?: Size;
+  align?: Align;
+}>();
 
 const sizes: Record<Size, string> = {
   normal: "text-4xl",

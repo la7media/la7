@@ -1,4 +1,5 @@
 import type { RegisterParams } from "~/lib/interfaces/auth";
+import { randomNum } from "~/lib/utils";
 
 export const useAuth = () => {
   const supabase = useSupabaseClient();
@@ -28,7 +29,7 @@ export const useAuth = () => {
     try {
       const { data: profile, error } = await supabase
         .from("perfiles")
-        .select("*")
+        .select("*,activations(*)")
         .eq("user_id", userS.value!.id)
         .single();
 
@@ -160,18 +161,35 @@ export const useAuth = () => {
       }
 
       // 2. Crear perfil en la tabla perfiles
-      const { error: profileError } = await supabase.from("perfiles").insert({
-        user_id: authData.user.id,
-        nombre: params.nombre,
-        celular: parseInt(params.celular), // Convertir a numeric
-        direccion: params.direccion || null,
-        last_ubication: null,
-      } as never);
+      const { error: profileError, data: profileData } = await supabase
+        .from("perfiles")
+        .insert({
+          user_id: authData.user.id,
+          nombre: params.nombre,
+          celular: parseInt(params.celular), // Convertir a numeric
+          direccion: params.direccion || null,
+          last_ubication: null,
+          activation_code: Math.round(1000 + Math.random() * 9000),
+        } as never);
 
       if (profileError) {
         console.error("Error al crear perfil:", profileError);
 
         return { error: "Error al crear el perfil de usuario" };
+      }
+      // 2. Crear activación
+      const { error: activationError, data: activationData } = await supabase
+        .from("activations")
+        .insert({
+          user_id: authData.user.id,
+          activation_code: randomNum(1000, 9999),
+        } as never);
+      console.log("insert data:", activationData);
+      console.log("insert error:", activationError);
+      if (activationError) {
+        console.error("Error al crear la activación:", activationError);
+
+        return { error: "Error al crear la activación del usuario" };
       }
 
       return { data: authData, error: null };
@@ -199,6 +217,11 @@ export const useAuth = () => {
   const isAdmin = () => {
     const profile = user.value?.profile as { type: string } | null;
     return profile?.type === "admin";
+  };
+
+  const isProvider = () => {
+    const profile = user.value?.profile as { type: string } | null;
+    return profile?.type === "provider";
   };
 
   const updatePassword = async (newPassword: string) => {
@@ -238,6 +261,7 @@ export const useAuth = () => {
     user,
     initializeAuth,
     isAdmin,
+    isProvider,
     logout,
     login,
     register,

@@ -55,11 +55,11 @@ supabase.auth.onAuthStateChange(async (event: string) => {
 // Procesar manualmente el código de recuperación si viene por URL
 onMounted(async () => {
   const code = route.query.code as string;
-
+  const user = useSupabaseUser();
   if (code) {
     isValidPasswordReset.value = true;
     isLoading.value = false;
-  } else {
+  } else if (!user.value) {
     isLoading.value = false;
     errorMessage.value =
       "No se encontró ningún código de recuperación en la URL.";

@@ -82,7 +82,6 @@ watch(
 watch(
   categoriasFilter,
   () => {
-    console.log("Categorias filter changed:", categoriasFilter.value);
     reset(categoriasFilter.value);
   },
   { deep: true }

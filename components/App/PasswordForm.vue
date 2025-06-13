@@ -11,16 +11,11 @@ interface Props {
 }
 
 const {
-  disabled,
-  showStrengthIndicator,
-  newPasswordLabel,
-  confirmPasswordLabel,
-} = withDefaults(defineProps<Props>(), {
-  disabled: false,
-  showStrengthIndicator: true,
-  newPasswordLabel: "Nueva contraseña",
-  confirmPasswordLabel: "Confirmar contraseña",
-});
+  disabled = false,
+  showStrengthIndicator = true,
+  newPasswordLabel = "Nueva contraseña",
+  confirmPasswordLabel = "Confirmar contraseña",
+} = defineProps<Props>();
 
 const emit = defineEmits<{
   "update:canSubmit": [value: boolean];

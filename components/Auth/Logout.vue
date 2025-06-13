@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const { logout } = useAuth();
-const manageLogout = () => {
-  useLocation().activeLocation.value = false;
+const manageLogout = async () => {
+  await logout();
   useLike().filterLike.value = false;
-  logout();
+  useLocation().reset();
 };
 </script>
 

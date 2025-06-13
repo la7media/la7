@@ -28,8 +28,8 @@ const registerManage = async () => {
     return;
   }
 
-  if (registerParams.value.password.length < 8) {
-    errorMessage.value = "La contraseña debe tener al menos 6 caracteres";
+  if (registerParams.value.password.length < 6) {
+    errorMessage.value = "La contraseña debe tener al menos 6 carácteres";
     return;
   }
 
@@ -50,12 +50,16 @@ const registerManage = async () => {
   try {
     const { error } = await register(registerParams.value, token.value);
     if (!error) {
-      successMessage.value =
-        "Cuenta creada exitosamente. Revisa tu correo para confirmar tu cuenta.";
+      successMessage.value = "Cuenta creada exitosamente.";
       // Opcional: redirigir después de unos segundos
       setTimeout(() => {
-        navigateTo("/login");
+        navigateTo("/directorio");
       }, 3000);
+    } else {
+      switch (error) {
+        case "User already registered":
+          errorMessage.value = "El usuario ya está registrado.";
+      }
     }
   } catch (err) {
     errorMessage.value =
@@ -178,7 +182,7 @@ const registerManage = async () => {
             Confirmar Contraseña *
           </Label>
           <PasswordInput
-            id="password"
+            id="password_confirm"
             v-model="registerParams.confirmPassword"
             placeholder="••••••••"
             required
